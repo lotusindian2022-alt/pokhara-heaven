@@ -1,0 +1,189 @@
+---
+/**
+ * Reservation form card. Posts to /api/reservar.
+ * - With JS: intercepts submit, POSTs JSON, shows inline confirmation.
+ * - Without JS: native POST → the endpoint 303-redirects to /gracias.
+ */
+---
+
+<div class="rf-card">
+  <form id="rf-form" class="rf-form" method="POST" action="/api/reservar">
+    <!-- Honeypot: hidden from users, tempting to bots. Server rejects if filled. -->
+    <div class="rf-hp" aria-hidden="true">
+      <label for="rf-website">No rellenar este campo</label>
+      <input id="rf-website" type="text" name="website" tabindex="-1" autocomplete="off" />
+    </div>
+
+    <div class="rf-grid">
+      <div class="rf-field rf-col-2">
+        <label for="rf-nombre">Nombre</label>
+        <input id="rf-nombre" name="nombre" type="text" required autocomplete="name" placeholder="Tu nombre" />
+      </div>
+
+      <div class="rf-field">
+        <label for="rf-telefono">Teléfono</label>
+        <input id="rf-telefono" name="telefono" type="tel" required autocomplete="tel" placeholder="+34 600 000 000" />
+      </div>
+      <div class="rf-field">
+        <label for="rf-email">Email <span class="rf-opt">(opcional)</span></label>
+        <input id="rf-email" name="email" type="email" autocomplete="email" placeholder="tucorreo@ejemplo.com" />
+      </div>
+
+      <div class="rf-field">
+        <label for="rf-fecha">Fecha</label>
+        <input id="rf-fecha" name="fecha" type="date" required />
+      </div>
+      <div class="rf-field">
+        <label for="rf-hora">Hora</label>
+        <input id="rf-hora" name="hora" type="time" required />
+      </div>
+
+      <div class="rf-field rf-col-2">
+        <label for="rf-personas">Comensales</label>
+        <input id="rf-personas" name="personas" type="number" min="1" max="30" step="1" required placeholder="2" />
+      </div>
+
+      <div class="rf-field rf-col-2">
+        <label for="rf-notas">Notas <span class="rf-opt">(alergias, trona, celebración…)</span></label>
+        <textarea id="rf-notas" name="notas" rows="3" placeholder="Cuéntanos cualquier detalle"></textarea>
+      </div>
+    </div>
+
+    <div class="rf-actions">
+      <button type="submit" class="ph-btn ph-btn-primary" id="rf-submit">Reservar mesa</button>
+      <span class="rf-hint">Te confirmamos por teléfono o email.</span>
+    </div>
+
+    <p id="rf-status" class="rf-status" role="status" aria-live="polite" hidden></p>
+  </form>
+</div>
+
+<style>
+  .rf-card {
+    background: var(--surface);
+    border-radius: var(--radius-card);
+    padding: 28px;
+    box-shadow: var(--shadow-card);
+    border: 1px solid rgba(43, 35, 32, 0.06);
+  }
+  .rf-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .rf-col-2 { grid-column: 1 / -1; }
+  .rf-field { display: flex; flex-direction: column; gap: 6px; }
+  .rf-field label {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .rf-opt { text-transform: none; letter-spacing: 0; font-weight: 500; color: var(--faint); }
+
+  .rf-field input,
+  .rf-field textarea {
+    font-family: 'Mukta', sans-serif;
+    font-size: 17px;
+    color: var(--ink);
+    background: var(--ground);
+    border: 1.5px solid rgba(43, 35, 32, 0.18);
+    border-radius: var(--radius);
+    padding: 11px 14px;
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    width: 100%;
+  }
+  .rf-field textarea { resize: vertical; min-height: 84px; }
+  .rf-field input:focus,
+  .rf-field textarea:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(184, 134, 11, 0.14);
+  }
+  .rf-field input:user-invalid,
+  .rf-field textarea:user-invalid { border-color: var(--spice); }
+
+  .rf-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-top: 22px;
+  }
+  .rf-hint { font-size: 15px; color: var(--muted-2); }
+
+  .rf-status {
+    margin: 18px 0 0;
+    padding: 12px 16px;
+    border-radius: var(--radius);
+    font-size: 16px;
+    font-weight: 500;
+  }
+  .rf-status[data-kind='ok'] { background: rgba(27, 153, 139, 0.12); color: var(--green-text); }
+  .rf-status[data-kind='error'] { background: rgba(192, 57, 43, 0.1); color: var(--spice); }
+
+  /* Honeypot — visually and from-flow hidden, still focusable-free for bots. */
+  .rf-hp {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  @media (max-width: 480px) {
+    .rf-grid { grid-template-columns: 1fr; }
+    .rf-card { padding: 22px; }
+  }
+</style>
+
+<script>
+  const form = document.getElementById('rf-form') as HTMLFormElement | null;
+  const status = document.getElementById('rf-status') as HTMLParagraphElement | null;
+  const submit = document.getElementById('rf-submit') as HTMLButtonElement | null;
+
+  if (form && status && submit) {
+    const show = (kind: 'ok' | 'error', msg: string) => {
+      status.hidden = false;
+      status.dataset.kind = kind;
+      status.textContent = msg;
+    };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      // Native constraint validation first.
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      submit.disabled = true;
+      const originalLabel = submit.textContent;
+      submit.textContent = 'Enviando…';
+
+      try {
+        const data = Object.fromEntries(new FormData(form).entries());
+        const res = await fetch(form.action, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(data),
+        });
+
+        if (res.ok) {
+          form.reset();
+          show('ok', '¡Gracias! Hemos recibido tu solicitud de reserva. Te confirmaremos en breve.');
+        } else {
+          const body = await res.json().catch(() => ({}));
+          show('error', body?.error ?? 'No se pudo enviar la reserva. Llámanos y te ayudamos.');
+        }
+      } catch {
+        show('error', 'No hay conexión ahora mismo. Llámanos y te ayudamos.');
+      } finally {
+        submit.disabled = false;
+        submit.textContent = originalLabel;
+      }
+    });
+  }
+</script>

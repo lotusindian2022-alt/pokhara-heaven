@@ -1,0 +1,61 @@
+---
+import type { MenuSection } from '../data/menu';
+
+interface Props {
+  sections: MenuSection[];
+  totalDishes: number;
+}
+const { sections, totalDishes } = Astro.props;
+---
+
+<div
+  style="position:sticky; top:0; z-index:15; background:rgba(244,234,219,0.94); backdrop-filter:blur(10px); border-bottom:1px solid rgba(43,35,32,0.14);"
+>
+  <div
+    style="max-width:var(--maxw-menu); margin:0 auto; padding:12px 24px; display:flex; align-items:center; gap:12px; flex-wrap:wrap;"
+  >
+    <div style="position:relative; flex:1 1 240px; max-width:360px; min-width:170px;">
+      <svg
+        style="position:absolute; left:14px; top:50%; transform:translateY(-50%); pointer-events:none;"
+        width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#8a7d70" stroke-width="2" stroke-linecap="round" aria-hidden="true"
+      >
+        <circle cx="11" cy="11" r="7"></circle>
+        <line x1="21" y1="21" x2="16.5" y2="16.5"></line>
+      </svg>
+      <input
+        id="m-search"
+        type="search"
+        autocomplete="off"
+        placeholder="Buscar plato…"
+        aria-label="Buscar plato"
+        style="width:100%; padding:10px 16px 10px 40px; border-radius:100px; border:1.5px solid rgba(43,35,32,0.18); background:var(--surface); font-family:'Mukta',sans-serif; font-size:15px; color:var(--ink); outline:none;"
+      />
+    </div>
+
+    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+      <button class="m-filter" type="button" data-filter="veg" data-color="#12796d" aria-pressed="false">
+        <span style="width:8px; height:8px; border-radius:50%; background:var(--green); display:inline-block;"></span>Veg
+      </button>
+      <button class="m-filter" type="button" data-filter="spice" data-color="#C0392B" aria-pressed="false">
+        <span style="width:8px; height:8px; border-radius:50%; background:var(--spice); display:inline-block;"></span>Picante
+      </button>
+    </div>
+
+    <select
+      id="m-jump"
+      aria-label="Ir a categoría"
+      style="padding:10px 16px; border-radius:100px; border:1.5px solid rgba(43,35,32,0.18); background:var(--surface); font-family:'Mukta',sans-serif; font-size:15px; font-weight:600; color:#4a3f36; cursor:pointer; outline:none;"
+    >
+      <option value="">Ir a categoría…</option>
+      {sections.map((s) => <option value={s.id}>{s.title}</option>)}
+    </select>
+
+    <span
+      id="m-count"
+      aria-live="polite"
+      style="margin-left:auto; font-size:14px; font-weight:600; color:var(--muted-2); white-space:nowrap;"
+    >
+      {totalDishes} platos
+    </span>
+  </div>
+</div>

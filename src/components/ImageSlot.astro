@@ -1,0 +1,74 @@
+---
+/**
+ * ImageSlot — a photography drop-zone.
+ *
+ * Every photo in the design is a placeholder. While a slot has no real image it
+ * renders a tasteful gradient so the layout still reads as intentional. To drop
+ * in real photography, import it and pass it as `src`:
+ *
+ *   import hero from '../assets/hero.jpg';
+ *   <ImageSlot src={hero} alt="Momos al vapor" priority sizes="100vw" />
+ *
+ * When `src` is set the image is optimized by astro:assets (AVIF/WebP,
+ * responsive srcset, Sharp locally, Vercel's Image CDN in production).
+ */
+import { Image } from 'astro:assets';
+
+interface Props {
+  /** Optional imported image. Omit to render the placeholder. */
+  src?: ImageMetadata;
+  /** Describes the intended shot (also used as the placeholder label / alt fallback). */
+  placeholder: string;
+  alt?: string;
+  /** LCP images (e.g. the hero) load eagerly with high priority; everything else is lazy. */
+  priority?: boolean;
+  /** Responsive sizes hint for srcset selection. */
+  sizes?: string;
+  /** Widths astro:assets should generate for the srcset. */
+  widths?: number[];
+  /** Compression quality (1–100). 80 is a strong size/quality tradeoff for photos. */
+  quality?: number;
+  /** Placeholder gradient mood. */
+  tone?: 'warm' | 'dark' | 'ember' | 'green';
+  /** Whether to show the descriptive label on the placeholder. */
+  showLabel?: boolean;
+  class?: string;
+}
+
+const {
+  src,
+  placeholder,
+  alt,
+  priority = false,
+  sizes,
+  widths,
+  quality = 80,
+  tone = 'warm',
+  showLabel = true,
+  class: className,
+} = Astro.props;
+---
+
+{
+  src ? (
+    <Image
+      src={src}
+      alt={alt ?? placeholder}
+      sizes={sizes}
+      widths={widths}
+      quality={quality}
+      loading={priority ? 'eager' : 'lazy'}
+      decoding={priority ? 'auto' : 'async'}
+      class:list={['ph-imgslot-img', className]}
+      {...(priority ? { fetchpriority: 'high' } : {})}
+    />
+  ) : (
+    <div
+      class:list={['ph-imgslot', `ph-imgslot--${tone}`, className]}
+      role="img"
+      aria-label={alt ?? placeholder}
+    >
+      {showLabel && <span class="ph-imgslot__label">{placeholder}</span>}
+    </div>
+  )
+}

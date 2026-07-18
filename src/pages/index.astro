@@ -1,0 +1,249 @@
+---
+import Base from '../layouts/Base.astro';
+import PrayerFlag from '../components/PrayerFlag.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import DishCard from '../components/DishCard.astro';
+import ImageSlot from '../components/ImageSlot.astro';
+import ReservationForm from '../components/ReservationForm.astro';
+import heroHimalaya from '../assets/hero-himalaya.jpg';
+import { site } from '../data/site';
+
+// Lattice overlay opacity — the handoff's "motif" prop (subtle 0.08 / bold 0.16 / none 0).
+const latticeOpacity = 0.08;
+
+const signatureDishes = [
+  { title: 'Momos al vapor', price: '10,95€', desc: 'Masa doblada a mano, rellena de pollo y especias, al vapor. El plato que define Nepal.', placeholder: 'Momos al vapor', tone: 'warm' as const },
+  { title: 'Chicken Sekuwa', price: '12,90€', desc: 'Pollo marinado a la brasa con pimienta negra y especias nepalíes. Nuestra especialidad.', placeholder: 'Sekuwa a la brasa', tone: 'ember' as const },
+  { title: 'Chicken Thali', price: '22,95€', desc: 'Bandeja completa: arroz basmati, curry, dal negro, raita, papadum y gulab jamun.', placeholder: 'Thali completo', tone: 'warm' as const },
+  { title: 'Jhol Momo', price: '6,95€', desc: 'Momos servidos en su caldo especiado de sésamo y tomate. Reconfortante.', placeholder: 'Jhol momo en caldo', tone: 'ember' as const },
+  { title: 'Butter Chicken', price: '12,95€', desc: 'Pollo en salsa cremosa de tomate, mantequilla y especias suaves. Un clásico que gusta a todos.', placeholder: 'Butter Chicken', tone: 'ember' as const },
+  { title: 'Mustang Aloo', price: '6,95€', desc: 'Patata salteada con ajo, jengibre, cilantro y especias. Muy popular en Nepal.', placeholder: 'Mustang aloo', veg: true, tone: 'green' as const },
+];
+---
+
+<Base
+  title="Pokhara Heaven — Cocina himalaya en Madrid"
+  description="Restaurante nepalí en Madrid. Momos hechos a mano, sekuwa a la brasa y thali del valle de Pokhara. A domicilio, para recoger o mesa reservada."
+  path="/"
+>
+  <PrayerFlag />
+  <Nav variant="home" />
+
+  <main id="main">
+    <!-- HERO -->
+    <section style="position:relative; min-height:80vh; display:flex; align-items:center; justify-content:center; overflow:hidden;">
+      <div data-parallax style="position:absolute; left:0; right:0; top:-10%; height:120%;">
+        <div style="position:absolute; inset:0;">
+          <ImageSlot
+            src={heroHimalaya}
+            alt="Amanecer sobre la cordillera del Himalaya y un pueblo de Nepal"
+            placeholder="Foto principal — momos al vapor humeantes / thali (a todo color, luz cálida)"
+            tone="dark"
+            priority
+            sizes="100vw"
+            widths={[640, 960, 1280, 1600, 1920, 2560]}
+          />
+        </div>
+      </div>
+      <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(58,20,18,0.32) 0%, rgba(58,20,18,0.08) 34%, rgba(40,18,16,0.84) 100%); pointer-events:none;"></div>
+      <div data-steam style="position:absolute; left:11%; bottom:250px; width:10px; height:60px; border-radius:50%; background:rgba(255,255,255,0.6); filter:blur(7px); animation:ph-steam 4.5s ease-in-out infinite; pointer-events:none;"></div>
+      <div data-steam style="position:absolute; left:13.5%; bottom:250px; width:9px; height:52px; border-radius:50%; background:rgba(255,255,255,0.5); filter:blur(7px); animation:ph-steam 5.2s ease-in-out 1.1s infinite; pointer-events:none;"></div>
+      <div style="position:relative; padding:60px var(--gutter-home); color:var(--cream); width:100%; text-align:center;">
+        <span style="display:inline-block; font-size:15px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:var(--cream); background:rgba(247,241,230,0.16); backdrop-filter:blur(6px); border:1px solid rgba(247,241,230,0.45); padding:8px 16px; border-radius:100px; margin-bottom:22px;">नमस्ते · Cocina himalaya en Madrid</span>
+        <h1 class="v2-title" style="font-family:'Marcellus',serif; line-height:0.98; letter-spacing:0; margin:0 auto; max-width:12ch; text-shadow:0 2px 30px rgba(40,18,16,0.45);">Pokhara <span style="color:var(--gold-bright);">Heaven</span></h1>
+        <p style="font-size:21px; line-height:1.55; max-width:52ch; margin:24px auto 0; color:rgba(247,241,230,0.94);">Dumplings del Himalaya, sekuwa a la brasa y thali de Nepal — recetas de familia del valle de Pokhara, servidas en el corazón de la ciudad.</p>
+        <div style="display:flex; gap:14px; margin-top:34px; flex-wrap:wrap; justify-content:center;">
+          <a class="ph-btn ph-btn-primary" href="#pedir">Pedir a domicilio</a>
+          <a class="ph-btn ph-btn-ghost" href="/carta">Ver la carta</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- STORY -->
+    <section id="historia" style="position:relative; min-height:600px; display:flex; align-items:center; justify-content:center; text-align:center; overflow:hidden; background:var(--dark);">
+      <div data-parallax style="position:absolute; left:0; right:0; top:-10%; height:120%;">
+        <div style="position:absolute; inset:0;">
+          <ImageSlot
+            placeholder="Foto ambiente — cocinero doblando momos / madera tallada y latón"
+            tone="dark"
+            sizes="100vw"
+            showLabel={false}
+          />
+        </div>
+      </div>
+      <div style="position:absolute; inset:0; background:linear-gradient(90deg, rgba(46,23,18,0.9) 0%, rgba(46,23,18,0.64) 40%, rgba(46,23,18,0.66) 58%, rgba(46,23,18,0.96) 100%); pointer-events:none;"></div>
+      <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(46,23,18,0.5) 0%, transparent 32%, rgba(46,23,18,0.55) 100%); pointer-events:none;"></div>
+      <div style={`position:absolute; inset:0; opacity:${latticeOpacity}; background-image:var(--pattern-lattice); pointer-events:none;`}></div>
+      <div data-reveal style="position:relative; padding:100px 24px; color:var(--cream); max-width:900px; margin:0 auto;">
+        <span style="display:block; font-size:15px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--gold-bright); margin-bottom:20px;">Nuestra historia · दाल भात</span>
+        <h2 style="font-family:'Marcellus',serif; font-weight:400; font-size:54px; line-height:1.08; letter-spacing:0; margin:0;">Del valle de Pokhara a tu mesa</h2>
+        <div style="width:56px; height:3px; background:var(--gold); margin:26px auto;"></div>
+        <p style="font-size:21px; line-height:1.75; color:rgba(247,241,230,0.92); margin:0 auto; max-width:62ch;">Pokhara es la ciudad de los lagos, a los pies del Annapurna. De allí traemos lo esencial: el momo doblado a mano una pieza a la vez, la brasa lenta del sekuwa y los curris cocinados sin prisa.</p>
+        <p style="font-size:21px; line-height:1.75; color:rgba(247,241,230,0.92); margin:18px auto 0; max-width:62ch;">Cocina newari y thakali honesta, especias auténticas y la hospitalidad de Nepal — en un rincón cálido de Madrid.</p>
+      </div>
+    </section>
+
+    <!-- SIGNATURE DISHES -->
+    <section id="platos" style="padding:104px var(--gutter-home);">
+      <div data-reveal style="display:flex; align-items:flex-end; justify-content:space-between; gap:24px; flex-wrap:wrap; margin-bottom:48px;">
+        <div>
+          <span style="display:block; font-size:15px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:#2E7D46; margin-bottom:14px;">La casa recomienda</span>
+          <h2 style="font-family:'Marcellus',serif; font-weight:400; font-size:50px; line-height:1.1; letter-spacing:0; margin:0;">Nuestros platos de siempre</h2>
+        </div>
+        <a class="ph-btn ph-btn-secondary ph-btn--sm" href="/carta">Ver los 144 platos →</a>
+      </div>
+
+      <div data-reveal data-stagger class="v2-dishes" style="display:grid; grid-template-columns:repeat(3, 1fr); gap:30px;">
+        {signatureDishes.map((d) => <DishCard {...d} />)}
+      </div>
+    </section>
+
+    <!-- HERITAGE QUOTE -->
+    <section style="position:relative; min-height:480px; display:flex; align-items:center; justify-content:center; text-align:center; overflow:hidden;">
+      <div data-parallax style="position:absolute; left:0; right:0; top:-12%; height:124%;">
+        <div style="position:absolute; inset:0;">
+          <ImageSlot
+            placeholder="Foto amplia — brasa / manos doblando momos / paisaje de Pokhara"
+            tone="ember"
+            sizes="100vw"
+            showLabel={false}
+          />
+        </div>
+      </div>
+      <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(40,18,16,0.7), rgba(40,18,16,0.82)); pointer-events:none;"></div>
+      <div data-reveal style="position:relative; padding:100px max(24px, calc((100% - 1000px)/2)); color:var(--cream);">
+        <div style="display:flex; align-items:center; justify-content:center; gap:14px; margin-bottom:30px;">
+          <span style="height:1px; width:60px; background:linear-gradient(90deg,transparent,var(--gold-bright));"></span>
+          <span style="width:9px; height:9px; background:var(--gold-bright); transform:rotate(45deg);"></span>
+          <span style="height:1px; width:60px; background:linear-gradient(90deg,var(--gold-bright),transparent);"></span>
+        </div>
+        <p style="font-family:'Marcellus',serif; font-weight:400; font-size:42px; line-height:1.3; letter-spacing:0; margin:0; text-shadow:0 2px 24px rgba(40,18,16,0.5);">“En Nepal, el momo no se compra: se dobla en casa, uno a uno. Así lo servimos aquí.”</p>
+        <div style="font-size:15px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--gold-bright); margin-top:28px;">La familia de Pokhara Heaven</div>
+      </div>
+    </section>
+
+    <!-- ORDER / DELIVERY -->
+    <section id="pedir" style="background-color:var(--order-band); background-image:var(--pattern-turmeric); padding:104px var(--gutter-home); border-top:1px solid rgba(43,35,32,0.12);">
+      <div data-reveal class="v2-order" style="display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center;">
+        <div>
+          <span style="display:block; font-size:15px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--terracotta); margin-bottom:14px;">Para llevar y a domicilio</span>
+          <h2 style="font-family:'Marcellus',serif; font-weight:400; font-size:48px; line-height:1.1; letter-spacing:0; margin:0;">Nepal, en tu casa</h2>
+          <p style="font-size:21px; line-height:1.65; color:var(--muted); margin:20px 0 0; max-width:44ch;">Pide por tu plataforma favorita, o llámanos directamente para recoger o reservar mesa.</p>
+          <div style="margin-top:28px; display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;">
+            <a href={site.phoneHref} style="font-family:'Marcellus',serif; font-weight:400; font-size:33px; color:var(--ink); text-decoration:none;">{site.phone}</a>
+            <span style="font-size:17px; color:var(--muted);">· pedidos y reservas</span>
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+          {site.delivery.map((d) => (
+            <a class="ph-order" href={d.url}>
+              <span style={`width:12px; height:12px; border-radius:50%; background:${d.dot};`}></span>{d.name}
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- LOCATION / HOURS -->
+    <section id="visitanos" style="padding:104px var(--gutter-home);">
+      <div data-reveal>
+        <span style="display:block; font-size:15px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:#176B5F; margin-bottom:14px;">Visítanos</span>
+        <h2 style="font-family:'Marcellus',serif; font-weight:400; font-size:50px; line-height:1.1; letter-spacing:0; margin:0 0 44px;">Te esperamos en el centro</h2>
+      </div>
+      <div data-reveal class="v2-loc" style="display:grid; grid-template-columns:1.4fr 1fr; gap:32px; align-items:stretch;">
+        <figure style="margin:0; border-radius:12px; overflow:hidden; min-height:380px; position:relative;">
+          <div style="position:absolute; inset:0;">
+            <ImageSlot
+              placeholder="Mapa — Calle del Ejemplo 24, Madrid (captura de Google Maps)"
+              tone="green"
+              sizes="(max-width:720px) 100vw, 60vw"
+            />
+          </div>
+          <a href={site.address.mapsUrl} target="_blank" rel="noopener" style="position:absolute; left:20px; bottom:20px; background:#FCF6EC; color:var(--ink); text-decoration:none; font-weight:600; font-size:17px; padding:12px 18px; border-radius:9px; box-shadow:0 4px 18px rgba(46,23,18,0.18);">Ver en Google Maps →</a>
+        </figure>
+        <div style="display:flex; flex-direction:column; gap:14px;">
+          <div style="background:var(--surface); border-radius:12px; padding:28px; box-shadow:var(--shadow-soft);">
+            <span style="display:block; font-size:14px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:var(--terracotta); margin-bottom:12px;">Dónde</span>
+            <p style="font-size:20px; line-height:1.7; color:var(--ink); margin:0;">{site.address.line1}<br />{site.address.line2}<br /><span style="color:var(--muted);">{site.address.metro}</span></p>
+          </div>
+          <div style="background:var(--surface); border-radius:12px; padding:28px; box-shadow:var(--shadow-soft);">
+            <span style="display:block; font-size:14px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:var(--terracotta); margin-bottom:12px;">Horario</span>
+            <div style="font-size:17px; line-height:1.5; color:var(--ink);">
+              {site.hours.map((h, i) => (
+                <div style={`display:flex; justify-content:space-between; gap:16px; padding:7px 0;${i < site.hours.length - 1 ? ' border-bottom:1px solid rgba(43,35,32,0.08);' : ''}`}>
+                  <span>{h.days}</span><span style="color:var(--muted);">{h.time}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESERVATIONS -->
+    <section id="reservar" style="background:var(--dark); background-image:var(--pattern-lattice); background-blend-mode:soft-light; padding:104px var(--gutter-home); position:relative; overflow:hidden;">
+      <div style={`position:absolute; inset:0; background:var(--dark); opacity:${1 - latticeOpacity}; pointer-events:none;`}></div>
+      <div data-reveal class="v2-reserve" style="position:relative; display:grid; grid-template-columns:1fr 1.1fr; gap:56px; align-items:center;">
+        <div style="color:var(--cream);">
+          <span style="display:block; font-size:15px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--gold-bright); margin-bottom:14px;">Reserva tu mesa</span>
+          <h2 style="font-family:'Marcellus',serif; font-weight:400; font-size:48px; line-height:1.1; letter-spacing:0; margin:0;">Guardamos tu sitio</h2>
+          <p style="font-size:21px; line-height:1.65; color:rgba(247,241,230,0.86); margin:20px 0 0; max-width:44ch;">Dinos el día, la hora y cuántos sois. Te confirmamos por teléfono o email. Para hoy mismo, mejor llámanos.</p>
+          <div style="margin-top:26px; display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;">
+            <a href={site.phoneHref} style="font-family:'Marcellus',serif; font-weight:400; font-size:30px; color:var(--gold-bright); text-decoration:none;">{site.phone}</a>
+            <span style="font-size:17px; color:rgba(247,241,230,0.7);">· {site.address.line1}, {site.address.line2}</span>
+          </div>
+        </div>
+        <ReservationForm />
+      </div>
+    </section>
+  </main>
+
+  <Footer latticeOpacity={latticeOpacity} />
+</Base>
+
+<script>
+  // Reveal-on-scroll + parallax (ported from the handoff). Disabled under reduced motion.
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!reduce) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (!e.isIntersecting) return;
+          const t = e.target as HTMLElement;
+          const kids = t.hasAttribute('data-stagger') ? (Array.from(t.children) as HTMLElement[]) : [t];
+          kids.forEach((k, i) => {
+            k.style.animation = 'ph-rise 0.7s cubic-bezier(.2,.7,.2,1) ' + (i * 0.09).toFixed(2) + 's both';
+          });
+          io.unobserve(t);
+        });
+      },
+      { threshold: 0.12 },
+    );
+    document.querySelectorAll('[data-reveal]').forEach((el) => io.observe(el));
+
+    const px = Array.from(document.querySelectorAll('[data-parallax]')) as HTMLElement[];
+    if (px.length) {
+      let ticking = false;
+      const apply = () => {
+        const vh = window.innerHeight;
+        px.forEach((el) => {
+          const r = el.getBoundingClientRect();
+          const c = r.top + r.height / 2;
+          const off = (vh / 2 - c) * 0.1;
+          el.style.transform = 'translate3d(0,' + off.toFixed(1) + 'px,0)';
+        });
+        ticking = false;
+      };
+      const onScroll = () => {
+        if (!ticking) {
+          ticking = true;
+          requestAnimationFrame(apply);
+        }
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll, { passive: true });
+      apply();
+    }
+  }
+</script>

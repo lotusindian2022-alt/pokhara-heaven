@@ -1,0 +1,77 @@
+---
+import '../styles/global.css';
+import { site } from '../data/site';
+
+interface Props {
+  title: string;
+  description?: string;
+  /** Path for the canonical/OG url, e.g. "/" or "/carta". */
+  path?: string;
+}
+
+const {
+  title,
+  description = 'Restaurante nepalí en Madrid. Momos hechos a mano, sekuwa a la brasa, thali y curris del Himalaya. A domicilio, para recoger o mesa reservada.',
+  path = '/',
+} = Astro.props;
+
+const canonical = new URL(path, Astro.site ?? 'https://pokharaheaven.es').href;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="canonical" href={canonical} />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#F4EADB" />
+
+    <!-- Open Graph / social -->
+    <meta property="og:type" content="restaurant.restaurant" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content="es_ES" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Fonts: Marcellus (display), Mukta (body/UI), Fraunces (wordmark). -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Marcellus&family=Mukta:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Flag that JS is available before first paint (drives reveal-on-scroll without FOUC). -->
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+
+    <slot name="head" />
+  </head>
+  <body>
+    <a href="#main" class="ph-skip">Saltar al contenido</a>
+    <slot />
+
+    <style>
+      .ph-skip {
+        position: absolute;
+        left: -9999px;
+        top: 0;
+        z-index: 100;
+        background: var(--ink);
+        color: var(--cream);
+        padding: 12px 18px;
+        border-radius: 0 0 9px 0;
+        text-decoration: none;
+        font-weight: 600;
+      }
+      .ph-skip:focus { left: 0; }
+    </style>
+  </body>
+</html>

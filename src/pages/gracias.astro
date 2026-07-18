@@ -1,0 +1,36 @@
+---
+import Base from '../layouts/Base.astro';
+import PrayerFlag from '../components/PrayerFlag.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../data/site';
+---
+
+<Base title="Gracias — Pokhara Heaven" description="Hemos recibido tu solicitud de reserva." path="/gracias">
+  <PrayerFlag />
+  <Nav variant="home" />
+
+  <main id="main">
+    <section style="max-width:720px; margin:0 auto; padding:120px var(--gutter-home); text-align:center;">
+      <div style="display:flex; align-items:center; justify-content:center; gap:14px; margin-bottom:26px;">
+        <span style="height:1px; width:60px; background:linear-gradient(90deg,transparent,var(--gold));"></span>
+        <span style="width:9px; height:9px; background:var(--gold); transform:rotate(45deg);"></span>
+        <span style="height:1px; width:60px; background:linear-gradient(90deg,var(--gold),transparent);"></span>
+      </div>
+      <h1 style="font-family:'Marcellus',serif; font-weight:400; font-size:56px; line-height:1.06; margin:0;">
+        ¡Gracias! धन्यवाद
+      </h1>
+      <p style="font-size:21px; line-height:1.6; color:var(--muted); margin:22px auto 0; max-width:48ch;">
+        Hemos recibido tu solicitud de reserva. Te confirmaremos por teléfono o email lo antes posible.
+        Si es para hoy o tienes prisa, llámanos al
+        <a href={site.phoneHref} style="white-space:nowrap;">{site.phone}</a>.
+      </p>
+      <div style="display:flex; gap:14px; margin-top:34px; flex-wrap:wrap; justify-content:center;">
+        <a class="ph-btn ph-btn-primary" href="/">Volver al inicio</a>
+        <a class="ph-btn ph-btn-secondary" href="/carta">Ver la carta</a>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Base>

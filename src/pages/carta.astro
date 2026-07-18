@@ -1,0 +1,188 @@
+---
+import Base from '../layouts/Base.astro';
+import PrayerFlag from '../components/PrayerFlag.astro';
+import Nav from '../components/Nav.astro';
+import GalleryCard from '../components/GalleryCard.astro';
+import FilterBar from '../components/FilterBar.astro';
+import MenuSection from '../components/MenuSection.astro';
+import ImageSlot from '../components/ImageSlot.astro';
+import { site } from '../data/site';
+import { sections, totalDishes, totalCategories } from '../data/menu';
+
+const gallery = [
+  { title: 'Momos al vapor', price: '10,95€', tone: 'warm' as const },
+  { title: 'Chicken Sekuwa', price: '12,90€', tone: 'ember' as const },
+  { title: 'Chicken Thali', price: '22,95€', tone: 'warm' as const },
+  { title: 'Jhol Momo', price: '6,95€', tone: 'ember' as const },
+  { title: 'Butter Chicken', price: '12,95€', tone: 'ember' as const },
+  { title: 'Tikka Masala', price: '12,50€', tone: 'ember' as const },
+  { title: 'Chowmein', price: '10,50€', tone: 'warm' as const },
+  { title: 'Gulab Jamun', price: '5,20€', tone: 'warm' as const },
+];
+---
+
+<Base
+  title="La carta — Pokhara Heaven"
+  description={`${totalDishes} platos del Himalaya en ${totalCategories} categorías: momos, sekuwa, thali, tandoori y curris. Busca, filtra por vegetariano o picante.`}
+  path="/carta"
+>
+  <PrayerFlag />
+  <Nav variant="menu" />
+
+  <main id="main">
+    <!-- HERO BAND -->
+    <section id="top" style="position:relative; min-height:480px; display:flex; align-items:flex-end; overflow:hidden;">
+      <div style="position:absolute; inset:0;">
+        <ImageSlot
+          placeholder="Foto ancha — mesa servida / brasa / momos (a todo color)"
+          tone="dark"
+          priority
+          sizes="100vw"
+          showLabel={false}
+        />
+      </div>
+      <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(58,20,18,0.34) 0%, rgba(46,23,18,0.2) 42%, rgba(40,18,16,0.9) 100%); pointer-events:none;"></div>
+      <div style="position:absolute; inset:0; opacity:0.06; background-image:var(--pattern-lattice); pointer-events:none;"></div>
+      <div style="position:relative; padding:0 var(--gutter-menu) 52px; color:var(--cream); width:100%;">
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:18px;">
+          <span style="width:8px; height:8px; background:var(--gold-bright); transform:rotate(45deg);"></span>
+          <span style="font-size:14px; font-weight:600; letter-spacing:0.16em; text-transform:uppercase; color:#F0E4CE;">Cocina himalaya e india · Madrid</span>
+        </div>
+        <h1 class="m-h1" style="font-family:'Marcellus',serif; font-weight:400; font-size:84px; line-height:1.0; letter-spacing:0; margin:0; text-shadow:0 2px 24px rgba(40,18,16,0.5);">La carta <span style="color:var(--gold-bright);">भोजन</span></h1>
+        <p style="font-size:20px; line-height:1.55; max-width:58ch; margin:18px 0 0; color:rgba(247,241,230,0.92);">Momos hechos a mano, sekuwa a la brasa, thali, tandoori y curris del Himalaya — cada plato, como en casa.</p>
+        <div style="display:flex; align-items:center; gap:20px; margin-top:26px; flex-wrap:wrap; font-size:15px; color:rgba(247,241,230,0.9);">
+          <span style="display:flex; align-items:baseline; gap:8px;"><strong style="font-family:'Marcellus',serif; font-weight:400; font-size:27px; color:var(--gold-bright);">{totalDishes}</strong> platos</span>
+          <span style="width:5px; height:5px; border-radius:50%; background:rgba(247,241,230,0.45);"></span>
+          <span style="display:flex; align-items:baseline; gap:8px;"><strong style="font-family:'Marcellus',serif; font-weight:400; font-size:27px; color:var(--gold-bright);">{totalCategories}</strong> categorías</span>
+          <span style="width:5px; height:5px; border-radius:50%; background:rgba(247,241,230,0.45);"></span>
+          <span>Hecho a mano cada día · धन्यवाद</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- DISH GALLERY -->
+    <section style="max-width:var(--maxw-menu); margin:0 auto; padding:60px 24px 12px;">
+      <div style="display:flex; align-items:center; gap:14px; margin-bottom:8px;">
+        <span style="width:8px; height:8px; background:var(--gold); transform:rotate(45deg);"></span>
+        <span style="font-size:13px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--terracotta);">La galería</span>
+      </div>
+      <h2 style="font-family:'Marcellus',serif; font-weight:400; font-size:38px; letter-spacing:0.01em; margin:0 0 28px; color:var(--ink);">Los platos, en imágenes</h2>
+      <div class="m-gal" style="display:grid; grid-template-columns:repeat(4, 1fr); gap:20px;">
+        {gallery.map((g) => <GalleryCard title={g.title} price={g.price} placeholder={g.title} tone={g.tone} />)}
+      </div>
+    </section>
+
+    <!-- STICKY FILTER BAR -->
+    <FilterBar sections={sections} totalDishes={totalDishes} />
+
+    <!-- MENU SECTIONS -->
+    <div style="max-width:var(--maxw-menu); margin:0 auto; padding:0 24px 40px;">
+      {sections.map((sec) => <MenuSection sec={sec} />)}
+
+      <!-- allergen note -->
+      <p style="font-size:16px; color:var(--faint); margin:44px 0 0; text-align:center;">Para información sobre alérgenos, consulta a nuestro equipo. · कृपया एलर्जीबारे सोध्नुहोस्</p>
+
+      <!-- closing CTA -->
+      <div style="position:relative; overflow:hidden; background:var(--maroon); color:var(--cream); border-radius:16px; padding:52px 44px; margin-top:40px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:24px;">
+        <div style="position:absolute; inset:0; opacity:0.07; background-image:var(--pattern-lattice); pointer-events:none;"></div>
+        <div style="position:relative;">
+          <h2 style="font-family:'Marcellus',serif; font-weight:400; font-size:40px; line-height:1.12; letter-spacing:0; margin:0;">¿Lo pedimos?</h2>
+          <p style="font-size:19px; margin:12px 0 0; color:rgba(247,241,230,0.82); max-width:46ch;">A domicilio, para recoger o mesa reservada. {site.address.line1} · Madrid · {site.phone}</p>
+        </div>
+        <div style="position:relative; display:flex; gap:12px; flex-wrap:wrap;">
+          <a class="ph-btn ph-btn-primary ph-btn--sm" href="/#pedir">Pedir a domicilio</a>
+          <a class="ph-btn ph-btn-ghost ph-btn--sm" href="/#reservar">Reservar mesa</a>
+        </div>
+      </div>
+
+      <div style="padding:28px 0; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; font-size:15.5px; color:var(--faint);">
+        <span>© 2026 {site.name} · Restaurante nepalí</span>
+        <span>Los precios incluyen IVA · धन्यवाद</span>
+      </div>
+    </div>
+  </main>
+</Base>
+
+<script>
+  // Menu filtering — search + Veg/Picante chips + jump-to-category.
+  // Ported from the handoff's Component.componentDidMount.
+  const root = document;
+  const search = root.querySelector<HTMLInputElement>('#m-search');
+  const jump = root.querySelector<HTMLSelectElement>('#m-jump');
+  const count = root.querySelector<HTMLElement>('#m-count');
+  const btns = Array.from(root.querySelectorAll<HTMLButtonElement>('.m-filter'));
+  const foods = Array.from(root.querySelectorAll<HTMLElement>('.m-food'));
+  const drinks = Array.from(root.querySelectorAll<HTMLElement>('.m-drink'));
+  const secs = Array.from(root.querySelectorAll<HTMLElement>('[data-sec]'));
+
+  if (foods.length || search) {
+    const state = { veg: false, spice: false, q: '' };
+
+    const setBtn = (b: HTMLButtonElement, on: boolean) => {
+      const ac = b.getAttribute('data-color') || '';
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+      if (on) {
+        b.style.background = ac;
+        b.style.borderColor = ac;
+        b.style.color = '#FFF8ED';
+      } else {
+        b.style.background = '';
+        b.style.borderColor = '';
+        b.style.color = '';
+      }
+    };
+
+    const apply = () => {
+      const q = state.q;
+      let n = 0;
+      foods.forEach((el) => {
+        const ok =
+          (!state.veg || el.getAttribute('data-veg') === '1') &&
+          (!state.spice || el.getAttribute('data-spice') === '1') &&
+          (!q || (el.getAttribute('data-search') || '').indexOf(q) >= 0);
+        el.style.display = ok ? '' : 'none';
+        if (ok) n++;
+      });
+      const dietOn = state.veg || state.spice;
+      drinks.forEach((el) => {
+        const ok = !dietOn && (!q || (el.getAttribute('data-search') || '').indexOf(q) >= 0);
+        el.style.display = ok ? '' : 'none';
+      });
+      secs.forEach((sec) => {
+        const vis = sec.querySelector('.m-food:not([style*="display: none"]), .m-drink:not([style*="display: none"])');
+        sec.style.display = vis ? '' : 'none';
+      });
+      if (count) count.textContent = n + (n === 1 ? ' plato' : ' platos');
+    };
+
+    if (search) {
+      search.addEventListener('input', (e) => {
+        state.q = (e.target as HTMLInputElement).value.trim().toLowerCase();
+        apply();
+      });
+    }
+
+    btns.forEach((b) =>
+      b.addEventListener('click', () => {
+        const f = b.getAttribute('data-filter') as 'veg' | 'spice';
+        state[f] = !state[f];
+        setBtn(b, state[f]);
+        apply();
+      }),
+    );
+
+    if (jump) {
+      jump.addEventListener('change', (e) => {
+        const id = (e.target as HTMLSelectElement).value;
+        if (!id) return;
+        const t = root.querySelector<HTMLElement>('#' + id);
+        if (t) {
+          window.scrollTo({ top: t.getBoundingClientRect().top + window.scrollY - 68, behavior: 'smooth' });
+        }
+        (e.target as HTMLSelectElement).selectedIndex = 0;
+      });
+    }
+
+    apply();
+  }
+</script>

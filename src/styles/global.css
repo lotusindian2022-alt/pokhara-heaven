@@ -1,0 +1,321 @@
+/* =============================================================================
+   Pokhara Heaven — global stylesheet / design system
+   Ported from the design handoff's <helmet><style> blocks and centralized into
+   design tokens. Brand red consolidated to a single token (#9E2B25) per the
+   handoff's recommendation; the spicy indicator keeps its own semantic color.
+   ========================================================================== */
+
+:root {
+  /* --- Surfaces & ink --- */
+  --ground: #F4EADB;        /* page background */
+  --surface: #FFFDF7;       /* cards, inputs, panels */
+  --ink: #2B2320;           /* primary text / headings */
+  --muted: #5c5148;         /* body copy */
+  --muted-2: #6b5f54;       /* secondary copy */
+  --faint: #8a7d70;         /* notes */
+  --faint-2: #a89a89;       /* placeholders */
+  --cream: #F7F1E6;         /* text on dark / photos */
+  --dark: #2E1712;          /* story + footer bg */
+  --maroon: #5E211C;        /* menu closing-CTA bg */
+  --order-band: #EAD9BE;    /* delivery band bg */
+
+  /* --- Brand + accents --- */
+  --red: #9E2B25;           /* consolidated brand primary */
+  --red-hover: #7E211C;
+  --gold: #B8860B;          /* underlines, dividers, focus */
+  --gold-bright: #E7B84B;   /* accents on dark */
+  --gold-2: #E1A730;        /* lattice / highlights */
+  --terracotta: #A0522D;    /* prices on home + gallery */
+  --green: #1B998B;         /* veg dot */
+  --green-text: #12796d;    /* veg text */
+  --spice: #C0392B;         /* semantic "spicy" indicator */
+
+  /* --- Prayer flag --- */
+  --flag-blue: #1C6FB0;
+  --flag-white: #F5F1E8;
+  --flag-green: #2E8B57;
+
+  /* --- Geometry --- */
+  --radius: 9px;
+  --radius-card: 12px;
+  --radius-panel: 14px;
+  --maxw-home: 1200px;
+  --maxw-menu: 1160px;
+
+  /* Centered content gutter (matches handoff's max()/calc pattern) */
+  --gutter-home: max(24px, calc((100% - var(--maxw-home)) / 2));
+  --gutter-menu: max(24px, calc((100% - var(--maxw-menu)) / 2));
+
+  /* --- Shadows --- */
+  --shadow-card: 0 12px 36px rgba(46, 23, 18, 0.08);
+  --shadow-card-hover: 0 18px 46px rgba(46, 23, 18, 0.16);
+  --shadow-soft: 0 8px 26px rgba(46, 23, 18, 0.06);
+  --shadow-btn-hover: 0 8px 20px rgba(46, 23, 18, 0.28);
+
+  /* --- Decorative SVG motifs (inline data URIs, from the handoff) --- */
+  --pattern-ground: url("data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%2760%27%20height=%2760%27%20viewBox=%270%200%2060%2060%27%3E%3Cg%20fill=%27none%27%20stroke=%27%23D8C6A6%27%20stroke-width=%271%27%3E%3Cpath%20d=%27M30%200%20L60%2030%20L30%2060%20L0%2030%20Z%27/%3E%3Ccircle%20cx=%2730%27%20cy=%2730%27%20r=%277%27/%3E%3C/g%3E%3C/svg%3E");
+  --pattern-lattice: url("data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%2752%27%20height=%2752%27%20viewBox=%270%200%2052%2052%27%3E%3Cg%20fill=%27none%27%20stroke=%27%23E1A730%27%20stroke-width=%271%27%3E%3Cpath%20d=%27M26%200%20L52%2026%20L26%2052%20L0%2026%20Z%27/%3E%3Cpath%20d=%27M26%200%20L26%2052%20M0%2026%20L52%2026%27/%3E%3Ccircle%20cx=%2726%27%20cy=%2726%27%20r=%276%27/%3E%3C/g%3E%3C/svg%3E");
+  --pattern-turmeric: url("data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%2760%27%20height=%2760%27%20viewBox=%270%200%2060%2060%27%3E%3Cg%20fill=%27none%27%20stroke=%27%23CBAB6E%27%20stroke-width=%271%27%3E%3Cpath%20d=%27M30%200%20L60%2030%20L30%2060%20L0%2030%20Z%27/%3E%3Ccircle%20cx=%2730%27%20cy=%2730%27%20r=%277%27/%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* -----------------------------------------------------------------------------
+   Reset / base
+   -------------------------------------------------------------------------- */
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background-color: var(--ground);
+  background-image: var(--pattern-ground);
+  color: var(--ink);
+  font-family: 'Mukta', system-ui, sans-serif;
+  font-size: 17px;
+  text-wrap: pretty;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--red); }
+a:hover { color: var(--red-hover); }
+
+::selection { background: rgba(184, 134, 11, 0.28); }
+
+img { max-width: 100%; }
+
+h1, h2, h3 { text-wrap: balance; }
+
+/* Accessible focus ring for keyboard users */
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+/* -----------------------------------------------------------------------------
+   Keyframes
+   -------------------------------------------------------------------------- */
+@keyframes ph-rise {
+  from { opacity: 0; transform: translateY(26px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes ph-steam {
+  0%   { transform: translateY(0) scaleX(1); opacity: 0; }
+  15%  { opacity: 0.5; }
+  60%  { opacity: 0.28; }
+  100% { transform: translateY(-46px) scaleX(1.5); opacity: 0; }
+}
+
+/* -----------------------------------------------------------------------------
+   Nav
+   -------------------------------------------------------------------------- */
+.ph-nav a.ph-link {
+  color: var(--ink);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 17px;
+  position: relative;
+}
+.ph-nav a.ph-link::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 100%; bottom: -4px;
+  height: 2px;
+  background: var(--gold);
+  transition: right 0.25s ease;
+}
+.ph-nav a.ph-link:hover::after { right: 0; }
+
+/* -----------------------------------------------------------------------------
+   Buttons
+   -------------------------------------------------------------------------- */
+.ph-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Mukta', sans-serif;
+  font-weight: 600;
+  font-size: 19px;
+  line-height: 1;
+  padding: 14px 28px;
+  border-radius: var(--radius);
+  text-decoration: none;
+  cursor: pointer;
+  border: 1.5px solid transparent;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease,
+    box-shadow 0.15s ease, border-color 0.15s ease;
+}
+/* Compact variant — nav pills, secondary CTAs */
+.ph-btn--sm { font-size: 17px; padding: 11px 22px; }
+
+.ph-btn-primary { background: var(--red); color: var(--cream); }
+.ph-btn-primary:hover {
+  background: var(--red-hover);
+  color: var(--cream);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-btn-hover);
+}
+.ph-btn-secondary { background: transparent; color: var(--ink); border-color: var(--ink); }
+.ph-btn-secondary:hover {
+  background: rgba(184, 134, 11, 0.14);
+  border-color: var(--gold);
+  color: var(--ink);
+  transform: translateY(-2px);
+}
+.ph-btn-ghost { background: transparent; color: var(--cream); border-color: rgba(247, 241, 230, 0.55); }
+.ph-btn-ghost:hover {
+  background: rgba(247, 241, 230, 0.12);
+  border-color: var(--cream);
+  color: var(--cream);
+  transform: translateY(-2px);
+}
+
+/* Order / delivery tiles (home) */
+.ph-order {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  border-radius: 10px;
+  border: 1.5px solid rgba(43, 35, 32, 0.14);
+  background: var(--surface);
+  text-decoration: none;
+  color: var(--ink);
+  font-weight: 600;
+  font-size: 19px;
+  transition: border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+}
+.ph-order:hover {
+  border-color: var(--gold);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(46, 23, 18, 0.1);
+  color: var(--ink);
+}
+
+/* -----------------------------------------------------------------------------
+   Cards (home signature dishes)
+   -------------------------------------------------------------------------- */
+.ph-card { transition: transform 0.18s ease, box-shadow 0.18s ease; }
+.ph-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-card-hover); }
+.ph-card:hover .ph-card-img { transform: scale(1.05); }
+.ph-card-img { transition: transform 0.5s ease; }
+
+/* -----------------------------------------------------------------------------
+   Menu — gallery cards, filter chips, dish rows
+   -------------------------------------------------------------------------- */
+.m-gcard { transition: transform 0.18s ease, box-shadow 0.18s ease; }
+.m-gcard:hover { transform: translateY(-5px); box-shadow: 0 16px 40px rgba(46, 23, 18, 0.16); }
+.m-gcard:hover .m-gimg { transform: scale(1.05); }
+.m-gimg { transition: transform 0.5s ease; }
+
+.m-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px;
+  border-radius: 100px;
+  border: 1.5px solid rgba(43, 35, 32, 0.18);
+  background: var(--surface);
+  color: #4a3f36;
+  font-family: 'Mukta', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+}
+.m-filter:hover { border-color: rgba(43, 35, 32, 0.42); transform: translateY(-1px); }
+.m-filter[aria-pressed='true'] { color: #FFF8ED; }
+
+#m-search::placeholder { color: var(--faint-2); }
+#m-search:focus, #m-jump:focus { border-color: var(--gold); }
+
+.m-item { border-radius: 10px; transition: background 0.15s ease; }
+.m-item:hover { background: rgba(225, 167, 48, 0.11); }
+
+/* -----------------------------------------------------------------------------
+   Image drop-zones (placeholders until real photography is added)
+   -------------------------------------------------------------------------- */
+.ph-imgslot {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  text-align: center;
+  background: linear-gradient(135deg, #E9D9BE 0%, #D8C29A 55%, #C7A87C 100%);
+  color: rgba(43, 35, 32, 0.5);
+}
+.ph-imgslot--dark   { background: linear-gradient(135deg, #4a2a20 0%, #351a13 60%, #24110d 100%); color: rgba(247, 241, 230, 0.42); }
+.ph-imgslot--warm   { background: linear-gradient(135deg, #E9D9BE 0%, #D8C29A 55%, #C7A87C 100%); }
+.ph-imgslot--ember  { background: linear-gradient(135deg, #C77E4F 0%, #A0522D 55%, #7E3A2E 100%); color: rgba(247, 241, 230, 0.5); }
+.ph-imgslot--green  { background: linear-gradient(135deg, #7FB6A6 0%, #4E9587 55%, #176B5F 100%); color: rgba(247, 241, 230, 0.5); }
+.ph-imgslot__label {
+  font-family: 'Mukta', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+  max-width: 22ch;
+}
+.ph-imgslot-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* -----------------------------------------------------------------------------
+   Reveal-on-scroll: the page script sets an inline `ph-rise` animation on each
+   [data-reveal] element (and staggers [data-stagger] children) once it enters
+   the viewport — matching the handoff. Elements are visible by default, so the
+   site is fully functional with JS disabled or when motion is reduced.
+   -------------------------------------------------------------------------- */
+
+/* -----------------------------------------------------------------------------
+   Responsive — grids collapse, hero type scales, nav links hide
+   -------------------------------------------------------------------------- */
+@media (max-width: 1000px) {
+  .v2-dishes { grid-template-columns: 1fr 1fr !important; }
+  .v2-foot   { grid-template-columns: 1fr 1fr !important; }
+  .v2-title  { font-size: 88px; }
+}
+@media (max-width: 820px) {
+  .m-grid { grid-template-columns: 1fr !important; }
+  .m-cols { column-count: 1 !important; }
+  .m-gal  { grid-template-columns: 1fr 1fr !important; }
+  .m-h1   { font-size: 60px !important; }
+}
+@media (max-width: 720px) {
+  .v2-dishes  { grid-template-columns: 1fr !important; }
+  .v2-order   { grid-template-columns: 1fr !important; gap: 36px !important; }
+  .v2-reserve { grid-template-columns: 1fr !important; gap: 36px !important; }
+  .v2-loc     { grid-template-columns: 1fr !important; }
+  .v2-foot   { grid-template-columns: 1fr !important; gap: 32px !important; }
+  .v2-title  { font-size: 60px; }
+  .ph-nav    { gap: 16px !important; padding-left: 18px !important; padding-right: 18px !important; }
+  .ph-nav a.ph-link { display: none !important; }
+}
+@media (max-width: 560px) {
+  .m-gal { grid-template-columns: 1fr 1fr !important; gap: 14px !important; }
+  .m-h1  { font-size: 44px !important; }
+  .ph-nav a.ph-link { display: none !important; }
+  .ph-nav { gap: 16px !important; }
+  body { font-size: 15px; }
+  .m-food, .m-drink { font-size: 15px !important; }
+  .m-food [style*="font-size:21px"] { font-size: 17px !important; }
+  .m-food [style*="font-size:16px"] { font-size: 14px !important; }
+  section[data-sec] h2 { font-size: 26px !important; }
+  section[data-sec] p { font-size: 15px !important; }
+}
+@media (max-width: 440px) {
+  .v2-title { font-size: 46px; }
+}
+
+/* -----------------------------------------------------------------------------
+   Reduced motion — disable reveal, parallax, smooth scroll, card image zoom.
+   (Preserved from the handoff.)
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .ph-card:hover .ph-card-img { transform: none; }
+  .m-gcard:hover .m-gimg { transform: none; }
+  [data-reveal], [data-stagger] > * { opacity: 1 !important; animation: none !important; }
+  [data-parallax] { transform: none !important; }
+  [data-steam] { display: none !important; }
+}

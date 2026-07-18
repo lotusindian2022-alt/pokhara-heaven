@@ -1,0 +1,107 @@
+---
+import type { MenuSection } from '../data/menu';
+
+interface Props {
+  sec: MenuSection;
+}
+const { sec } = Astro.props;
+---
+
+<section id={sec.id} data-sec style="scroll-margin-top:78px; padding-top:60px;">
+  <!-- section header -->
+  <div style="display:flex; align-items:center; gap:16px; margin-bottom:6px;">
+    <span
+      style={`width:34px; height:34px; border-radius:9px; background:${sec.tint}; display:flex; align-items:center; justify-content:center; flex:none;`}
+      aria-hidden="true"
+    >
+      <span style={`width:12px; height:12px; border-radius:3px; background:${sec.accent};`}></span>
+    </span>
+    <h2 style="font-family:'Marcellus',serif; font-weight:400; font-size:34px; letter-spacing:0.01em; margin:0; color:var(--ink);">
+      {sec.title}
+    </h2>
+    <span style={`font-size:14.5px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:${sec.accent};`}>
+      {sec.en}
+    </span>
+  </div>
+  <div
+    style={`height:2px; background:linear-gradient(90deg, ${sec.accent} 0%, rgba(43,35,32,0.08) 42%); border-radius:2px; margin-bottom:8px;`}
+  >
+  </div>
+
+  {
+    sec.flat && (
+      <div
+        style={`background:var(--surface); border-radius:var(--radius-panel); padding:14px; box-shadow:0 10px 32px rgba(43,35,32,0.08); border-top:3px solid ${sec.accent}; margin-top:18px;`}
+      >
+        <div class="m-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:2px 18px;">
+          {sec.items.map((it) => (
+            <div
+              class="m-item m-food"
+              data-veg={it.vegF}
+              data-spice={it.spiceF}
+              data-search={it.search}
+              style="display:grid; grid-template-columns:1fr auto; gap:12px; align-items:start; padding:14px 15px; border-top:1px solid rgba(43,35,32,0.07);"
+            >
+              <div>
+                <div style="display:flex; align-items:center; gap:7px; flex-wrap:wrap;">
+                  <span style="font-family:'Marcellus',serif; font-weight:400; font-size:21px; letter-spacing:0.01em; color:var(--ink);">
+                    {it.name}
+                  </span>
+                  {it.veg && (
+                    <span style="font-size:12.5px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:var(--green-text); background:rgba(27,153,139,0.13); padding:3px 8px; border-radius:100px;">
+                      Veg
+                    </span>
+                  )}
+                  {it.spice && (
+                    <span style="font-size:12.5px; font-weight:600; letter-spacing:0.04em; text-transform:uppercase; color:var(--spice); background:rgba(192,57,43,0.1); padding:3px 8px; border-radius:100px;">
+                      {it.spice}
+                    </span>
+                  )}
+                </div>
+                {it.hasDesc && (
+                  <p style="font-size:16px; line-height:1.5; color:var(--muted-2); margin:5px 0 0;">{it.desc}</p>
+                )}
+              </div>
+              <span style={`font-family:'Mukta',sans-serif; font-weight:700; font-size:19px; white-space:nowrap; color:${sec.accent};`}>
+                {it.price}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  {
+    sec.grouped && (
+      <div
+        style={`background:var(--surface); border-radius:var(--radius-panel); padding:26px 28px; box-shadow:0 10px 32px rgba(43,35,32,0.08); border-top:3px solid ${sec.accent}; margin-top:18px;`}
+      >
+        <div class="m-cols" style="column-count:2; column-gap:44px;">
+          {sec.groups.map((g) => (
+            <div style="break-inside:avoid; margin-bottom:22px;">
+              <div style={`font-size:14.5px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:${sec.accent}; margin-bottom:4px;`}>
+                {g.name}
+              </div>
+              {g.items.map((it) => (
+                <div
+                  class="m-drink"
+                  data-search={it.search}
+                  style="display:grid; grid-template-columns:1fr auto; gap:12px; align-items:baseline; padding:9px 0; border-top:1px solid rgba(43,35,32,0.07); font-size:17px;"
+                >
+                  <span style="color:var(--ink);">{it.name}</span>
+                  <span style={`font-family:'Mukta',sans-serif; font-weight:700; white-space:nowrap; color:${sec.accent};`}>
+                    {it.price}
+                  </span>
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+        <p style="font-size:15px; color:var(--faint); margin:6px 0 0;">
+          Carta completa de licores, ginebras, rones, whiskies y vinos disponible en el local.
+        </p>
+      </div>
+    )
+  }
+</section>

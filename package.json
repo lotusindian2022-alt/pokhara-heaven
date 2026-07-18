@@ -1,0 +1,19 @@
+{
+  "name": "pokhara-heaven",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Pokhara Heaven — Nepali/Himalayan restaurant website (Madrid). Home + Menu.",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.4.1",
+    "@astrojs/vercel": "^8.2.7",
+    "astro": "^5.13.7"
+  }
+}

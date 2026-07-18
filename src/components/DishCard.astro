@@ -1,0 +1,51 @@
+---
+import ImageSlot from './ImageSlot.astro';
+
+interface Props {
+  title: string;
+  price: string;
+  desc: string;
+  placeholder: string;
+  veg?: boolean;
+  tone?: 'warm' | 'dark' | 'ember' | 'green';
+  /** Optional imported photo; omit for the placeholder. */
+  src?: ImageMetadata;
+}
+const { title, price, desc, placeholder, veg = false, tone = 'warm', src } = Astro.props;
+---
+
+<article
+  class="ph-card"
+  style="background:var(--surface); border-radius:var(--radius-card); overflow:hidden; box-shadow:var(--shadow-card); border:1px solid rgba(43,35,32,0.06);"
+>
+  <div style="position:relative; aspect-ratio:4/3; overflow:hidden;">
+    <div class="ph-card-img" style="position:absolute; inset:0;">
+      <ImageSlot
+        src={src}
+        placeholder={placeholder}
+        alt={title}
+        tone={tone}
+        sizes="(max-width:720px) 100vw, (max-width:1000px) 50vw, 380px"
+        widths={[380, 560, 760]}
+      />
+    </div>
+    {
+      veg && (
+        <span style="position:absolute; top:14px; left:14px; background:var(--green); color:#fff; font-size:13px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; padding:5px 10px; border-radius:6px;">
+          Veg
+        </span>
+      )
+    }
+  </div>
+  <div style="padding:26px;">
+    <div style="display:flex; justify-content:space-between; align-items:baseline; gap:12px;">
+      <h3 style="font-family:'Marcellus',serif; font-weight:400; font-size:26px; letter-spacing:0.01em; margin:0;">
+        {title}
+      </h3>
+      <span style="font-family:'Mukta',sans-serif; font-weight:600; font-size:21px; color:var(--terracotta); white-space:nowrap;">
+        {price}
+      </span>
+    </div>
+    <p style="font-size:17px; line-height:1.6; color:var(--muted); margin:10px 0 0;">{desc}</p>
+  </div>
+</article>

@@ -1,0 +1,66 @@
+---
+import { site } from '../data/site';
+
+interface Props {
+  /** 'home' → sticky, full link set. 'menu' → not sticky (the filter bar is the sticky element). */
+  variant?: 'home' | 'menu';
+}
+const { variant = 'home' } = Astro.props;
+
+const links =
+  variant === 'home'
+    ? [
+        { label: 'Historia', href: '#historia' },
+        { label: 'Platos', href: '#platos' },
+        { label: 'Carta', href: '/carta' },
+        { label: 'Visítanos', href: '#visitanos' },
+      ]
+    : [
+        { label: 'Inicio', href: '/' },
+        { label: 'Carta', href: '#top' },
+      ];
+
+const reservarHref = variant === 'home' ? '#reservar' : '/#reservar';
+const gutter = variant === 'home' ? 'var(--gutter-home)' : 'var(--gutter-menu)';
+const sticky = variant === 'home';
+---
+
+<nav
+  class="ph-nav"
+  style={`display:flex; align-items:center; gap:36px; padding:20px ${gutter}; background:var(--ground); border-bottom:1px solid rgba(43,35,32,0.12);${
+    sticky ? ' position:sticky; top:0; z-index:20;' : ''
+  }`}
+>
+  <a class="ph-brand" href="/" aria-label={`${site.name} — inicio`}>
+    <span class="ph-brand__deva">{site.brandDevanagari}</span>
+    <span class="ph-brand__word">{site.name}</span>
+  </a>
+
+  {links.map((l) => <a class="ph-link" href={l.href}>{l.label}</a>)}
+
+  <a class="ph-btn ph-btn-primary ph-btn--sm" href={reservarHref}>Reservar</a>
+</nav>
+
+<style>
+  .ph-brand {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    text-decoration: none;
+    margin-right: auto;
+    white-space: nowrap;
+  }
+  .ph-brand__deva {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 17px;
+    color: var(--red);
+  }
+  .ph-brand__word {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 25px;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+</style>
