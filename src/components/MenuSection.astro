@@ -37,10 +37,11 @@ const { sec } = Astro.props;
           {sec.items.map((it) => (
             <div
               class="m-item m-food"
+              id={it.slug}
               data-veg={it.vegF}
               data-spice={it.spiceF}
               data-search={it.search}
-              style="display:grid; grid-template-columns:1fr auto; gap:12px; align-items:start; padding:14px 15px; border-top:1px solid rgba(43,35,32,0.07);"
+              style="scroll-margin-top:88px; display:grid; grid-template-columns:1fr auto; gap:12px; align-items:start; padding:14px 15px; border-top:1px solid rgba(43,35,32,0.07);"
             >
               <div>
                 <div style="display:flex; align-items:center; gap:7px; flex-wrap:wrap;">
@@ -99,7 +100,7 @@ const { sec } = Astro.props;
           ))}
         </div>
         <p style="font-size:15px; color:var(--faint); margin:6px 0 0;">
-          Carta completa de licores, ginebras, rones, whiskies y vinos disponible en el local.
+          Combinados: +2,50€. Consúltanos por cualquier bebida que no veas en la carta.
         </p>
       </div>
     )

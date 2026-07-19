@@ -1,13 +1,16 @@
 ---
 /**
- * Reservation form card. Posts to /api/reservar.
- * - With JS: intercepts submit, POSTs JSON, shows inline confirmation.
- * - Without JS: native POST → the endpoint 303-redirects to /gracias.
+ * Reservation form card.
+ * - With JS: builds a pre-filled WhatsApp message from the fields and opens it
+ *   — no backend or env vars needed; the request lands on the restaurant's WhatsApp.
+ * - Without JS: native POST to /api/reservar → 303-redirects to /gracias
+ *   (that endpoint emails via Resend if configured, otherwise just logs it).
  */
+import { site } from '../data/site';
 ---
 
 <div class="rf-card">
-  <form id="rf-form" class="rf-form" method="POST" action="/api/reservar">
+  <form id="rf-form" class="rf-form" method="POST" action="/api/reservar" data-wa={site.whatsappUrl}>
     <!-- Honeypot: hidden from users, tempting to bots. Server rejects if filled. -->
     <div class="rf-hp" aria-hidden="true">
       <label for="rf-website">No rellenar este campo</label>
@@ -50,8 +53,8 @@
     </div>
 
     <div class="rf-actions">
-      <button type="submit" class="ph-btn ph-btn-primary" id="rf-submit">Reservar mesa</button>
-      <span class="rf-hint">Te confirmamos por teléfono o email.</span>
+      <button type="submit" class="ph-btn ph-btn-primary" id="rf-submit">Reservar por WhatsApp</button>
+      <span class="rf-hint">Abrimos WhatsApp con tu reserva lista para enviar.</span>
     </div>
 
     <p id="rf-status" class="rf-status" role="status" aria-live="polite" hidden></p>
@@ -141,16 +144,11 @@
 <script>
   const form = document.getElementById('rf-form') as HTMLFormElement | null;
   const status = document.getElementById('rf-status') as HTMLParagraphElement | null;
-  const submit = document.getElementById('rf-submit') as HTMLButtonElement | null;
 
-  if (form && status && submit) {
-    const show = (kind: 'ok' | 'error', msg: string) => {
-      status.hidden = false;
-      status.dataset.kind = kind;
-      status.textContent = msg;
-    };
+  if (form && status) {
+    const waBase = form.dataset.wa || 'https://wa.me/34625587731';
 
-    form.addEventListener('submit', async (e) => {
+    form.addEventListener('submit', (e) => {
       e.preventDefault();
 
       // Native constraint validation first.
@@ -159,31 +157,28 @@
         return;
       }
 
-      submit.disabled = true;
-      const originalLabel = submit.textContent;
-      submit.textContent = 'Enviando…';
+      const data = new FormData(form);
+      const val = (k: string) => (data.get(k) ?? '').toString().trim();
 
-      try {
-        const data = Object.fromEntries(new FormData(form).entries());
-        const res = await fetch(form.action, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-          body: JSON.stringify(data),
-        });
+      const lines = [
+        'Hola Pokhara Heaven, quiero reservar una mesa:',
+        `• Nombre: ${val('nombre')}`,
+        `• Comensales: ${val('personas')}`,
+        `• Fecha: ${val('fecha')}`,
+        `• Hora: ${val('hora')}`,
+        `• Teléfono: ${val('telefono')}`,
+      ];
+      if (val('email')) lines.push(`• Email: ${val('email')}`);
+      if (val('notas')) lines.push(`• Notas: ${val('notas')}`);
 
-        if (res.ok) {
-          form.reset();
-          show('ok', '¡Gracias! Hemos recibido tu solicitud de reserva. Te confirmaremos en breve.');
-        } else {
-          const body = await res.json().catch(() => ({}));
-          show('error', body?.error ?? 'No se pudo enviar la reserva. Llámanos y te ayudamos.');
-        }
-      } catch {
-        show('error', 'No hay conexión ahora mismo. Llámanos y te ayudamos.');
-      } finally {
-        submit.disabled = false;
-        submit.textContent = originalLabel;
-      }
+      const url = `${waBase}?text=${encodeURIComponent(lines.join('\n'))}`;
+
+      status.hidden = false;
+      status.dataset.kind = 'ok';
+      status.textContent = 'Te abrimos WhatsApp con tu reserva. Pulsa enviar para confirmarla.';
+
+      const win = window.open(url, '_blank');
+      if (!win) window.location.href = url;
     });
   }
 </script>

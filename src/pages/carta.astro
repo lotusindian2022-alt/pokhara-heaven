@@ -8,16 +8,26 @@ import MenuSection from '../components/MenuSection.astro';
 import ImageSlot from '../components/ImageSlot.astro';
 import { site } from '../data/site';
 import { sections, totalDishes, totalCategories } from '../data/menu';
+import momosVapor from '../assets/momos-vapor.jpg';
+import sekuwa from '../assets/sekuwa.jpg';
+import jholMomo from '../assets/jhol-momo.jpg';
+import chowmein from '../assets/chowmein.jpg';
+import karahi from '../assets/karahi.jpg';
+import chilliChicken from '../assets/chilli-chicken.jpg';
+import mixGrill from '../assets/mix-grill.jpg';
+import cheeseNaan from '../assets/cheese-naan.jpg';
 
+// Gallery = the dishes we have real, accurate photography for (from the folder).
+// Each tile links to its dish row further down the page (#<slug>).
 const gallery = [
-  { title: 'Momos al vapor', price: '10,95€', tone: 'warm' as const },
-  { title: 'Chicken Sekuwa', price: '12,90€', tone: 'ember' as const },
-  { title: 'Chicken Thali', price: '22,95€', tone: 'warm' as const },
-  { title: 'Jhol Momo', price: '6,95€', tone: 'ember' as const },
-  { title: 'Butter Chicken', price: '12,95€', tone: 'ember' as const },
-  { title: 'Tikka Masala', price: '12,50€', tone: 'ember' as const },
-  { title: 'Chowmein', price: '10,50€', tone: 'warm' as const },
-  { title: 'Gulab Jamun', price: '5,20€', tone: 'warm' as const },
+  { title: 'Momos al vapor', price: '10,95€', src: momosVapor, tone: 'warm' as const, href: '#chicken-momo' },
+  { title: 'Chicken Sekuwa', price: '12,90€', src: sekuwa, tone: 'ember' as const, href: '#nepali-famous-chicken-sekuwa' },
+  { title: 'Jhol Momo', price: '6,95€', src: jholMomo, tone: 'ember' as const, href: '#jhol-momo' },
+  { title: 'Chowmein', price: '10,50€', src: chowmein, tone: 'warm' as const, href: '#chicken-tikka-chowmein' },
+  { title: 'Chicken Karahi', price: '12,50€', src: karahi, tone: 'ember' as const, href: '#chicken-karahi' },
+  { title: 'Chicken Chilly', price: '12,95€', src: chilliChicken, tone: 'ember' as const, href: '#chicken-chilly' },
+  { title: 'Pokhara Mix Grill', price: '16,90€', src: mixGrill, tone: 'ember' as const, href: '#pokhara-mix-grill' },
+  { title: 'Cheese Naan', price: '4,95€', src: cheeseNaan, tone: 'warm' as const, href: '#cheese-naan' },
 ];
 ---
 
@@ -68,7 +78,7 @@ const gallery = [
       </div>
       <h2 style="font-family:'Marcellus',serif; font-weight:400; font-size:38px; letter-spacing:0.01em; margin:0 0 28px; color:var(--ink);">Los platos, en imágenes</h2>
       <div class="m-gal" style="display:grid; grid-template-columns:repeat(4, 1fr); gap:20px;">
-        {gallery.map((g) => <GalleryCard title={g.title} price={g.price} placeholder={g.title} tone={g.tone} />)}
+        {gallery.map((g) => <GalleryCard title={g.title} price={g.price} placeholder={g.title} src={g.src} tone={g.tone} href={g.href} />)}
       </div>
     </section>
 
@@ -87,7 +97,7 @@ const gallery = [
         <div style="position:absolute; inset:0; opacity:0.07; background-image:var(--pattern-lattice); pointer-events:none;"></div>
         <div style="position:relative;">
           <h2 style="font-family:'Marcellus',serif; font-weight:400; font-size:40px; line-height:1.12; letter-spacing:0; margin:0;">¿Lo pedimos?</h2>
-          <p style="font-size:19px; margin:12px 0 0; color:rgba(247,241,230,0.82); max-width:46ch;">A domicilio, para recoger o mesa reservada. {site.address.line1} · Madrid · {site.phone}</p>
+          <p style="font-size:19px; margin:12px 0 0; color:rgba(247,241,230,0.82); max-width:46ch;">A domicilio, para recoger o mesa reservada. Madrid · {site.phone}</p>
         </div>
         <div style="position:relative; display:flex; gap:12px; flex-wrap:wrap;">
           <a class="ph-btn ph-btn-primary ph-btn--sm" href="/#pedir">Pedir a domicilio</a>

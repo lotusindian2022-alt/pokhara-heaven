@@ -7,13 +7,18 @@ interface Props {
   placeholder: string;
   tone?: 'warm' | 'dark' | 'ember' | 'green';
   src?: ImageMetadata;
+  /** If set, the card links to the dish (same-page anchor on the menu). */
+  href?: string;
 }
-const { title, price, placeholder, tone = 'warm', src } = Astro.props;
+const { title, price, placeholder, tone = 'warm', src, href } = Astro.props;
+const Tag = href ? 'a' : 'div';
 ---
 
-<div
+<Tag
   class="m-gcard"
-  style="background:var(--surface); border-radius:var(--radius-card); overflow:hidden; box-shadow:0 10px 30px rgba(46,23,18,0.08); border:1px solid rgba(43,35,32,0.06);"
+  href={href}
+  aria-label={href ? `${title} — ir al plato` : undefined}
+  style="display:block; text-decoration:none; color:inherit; background:var(--surface); border-radius:var(--radius-card); overflow:hidden; box-shadow:0 10px 30px rgba(46,23,18,0.08); border:1px solid rgba(43,35,32,0.06);"
 >
   <div style="position:relative; aspect-ratio:1/1; overflow:hidden;">
     <div class="m-gimg" style="position:absolute; inset:0;">
@@ -34,4 +39,4 @@ const { title, price, placeholder, tone = 'warm', src } = Astro.props;
       {price}
     </span>
   </div>
-</div>
+</Tag>

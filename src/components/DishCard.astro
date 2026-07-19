@@ -10,13 +10,18 @@ interface Props {
   tone?: 'warm' | 'dark' | 'ember' | 'green';
   /** Optional imported photo; omit for the placeholder. */
   src?: ImageMetadata;
+  /** If set, the whole card becomes a link (e.g. deep link to the dish on the menu). */
+  href?: string;
 }
-const { title, price, desc, placeholder, veg = false, tone = 'warm', src } = Astro.props;
+const { title, price, desc, placeholder, veg = false, tone = 'warm', src, href } = Astro.props;
+const Tag = href ? 'a' : 'article';
 ---
 
-<article
+<Tag
   class="ph-card"
-  style="background:var(--surface); border-radius:var(--radius-card); overflow:hidden; box-shadow:var(--shadow-card); border:1px solid rgba(43,35,32,0.06);"
+  href={href}
+  aria-label={href ? `${title} — ver en la carta` : undefined}
+  style="display:block; text-decoration:none; color:inherit; background:var(--surface); border-radius:var(--radius-card); overflow:hidden; box-shadow:var(--shadow-card); border:1px solid rgba(43,35,32,0.06);"
 >
   <div style="position:relative; aspect-ratio:4/3; overflow:hidden;">
     <div class="ph-card-img" style="position:absolute; inset:0;">
@@ -48,4 +53,4 @@ const { title, price, desc, placeholder, veg = false, tone = 'warm', src } = Ast
     </div>
     <p style="font-size:17px; line-height:1.6; color:var(--muted); margin:10px 0 0;">{desc}</p>
   </div>
-</article>
+</Tag>

@@ -1,5 +1,7 @@
 ---
+import { Image } from 'astro:assets';
 import { site } from '../data/site';
+import logo from '../assets/logo.jpg';
 
 interface Props {
   /** 'home' → sticky, full link set. 'menu' → not sticky (the filter bar is the sticky element). */
@@ -32,29 +34,56 @@ const sticky = variant === 'home';
   }`}
 >
   <a class="ph-brand" href="/" aria-label={`${site.name} — inicio`}>
-    <span class="ph-brand__deva">{site.brandDevanagari}</span>
+    <Image src={logo} alt={`${site.name} logo`} width={96} height={96} class="ph-brand__logo" loading="eager" />
     <span class="ph-brand__word">{site.name}</span>
   </a>
 
   {links.map((l) => <a class="ph-link" href={l.href}>{l.label}</a>)}
 
-  <a class="ph-btn ph-btn-primary ph-btn--sm" href={reservarHref}>Reservar</a>
+  <a class="ph-btn ph-btn-primary ph-btn--sm ph-nav__reservar" href={reservarHref}>Reservar</a>
+
+  <button class="ph-burger" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="ph-mobile-nav">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<!-- Mobile slide-in menu ("sidebar") — shown ≤720px via the hamburger above -->
+<div class="ph-drawer" id="ph-mobile-nav">
+  <div class="ph-drawer__backdrop" data-close></div>
+  <aside class="ph-drawer__panel" role="dialog" aria-modal="true" aria-label="Menú de navegación">
+    <div class="ph-drawer__head">
+      <span class="ph-drawer__brand">
+        <Image src={logo} alt="" width={72} height={72} class="ph-drawer__logo" />
+        {site.name}
+      </span>
+      <button class="ph-drawer__close" type="button" aria-label="Cerrar menú" data-close>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="6" y1="6" x2="18" y2="18"></line><line x1="18" y1="6" x2="6" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+    <nav class="ph-drawer__links">
+      {links.map((l) => <a href={l.href} data-close>{l.label}</a>)}
+    </nav>
+    <a class="ph-btn ph-btn-primary ph-drawer__cta" href={reservarHref} data-close>Reservar</a>
+  </aside>
+</div>
 
 <style>
   .ph-brand {
     display: flex;
-    align-items: baseline;
-    gap: 10px;
+    align-items: center;
+    gap: 12px;
     text-decoration: none;
     margin-right: auto;
     white-space: nowrap;
   }
-  .ph-brand__deva {
-    font-family: 'Fraunces', serif;
-    font-weight: 600;
-    font-size: 17px;
-    color: var(--red);
+  .ph-brand__logo {
+    height: 44px;
+    width: 44px;
+    border-radius: 50%;
+    display: block;
+    flex: none;
   }
   .ph-brand__word {
     font-family: 'Fraunces', serif;
@@ -63,4 +92,172 @@ const sticky = variant === 'home';
     letter-spacing: -0.01em;
     color: var(--ink);
   }
+
+  /* --- Hamburger (hidden on desktop, shown ≤720px) --- */
+  .ph-burger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 44px;
+    height: 44px;
+    padding: 11px;
+    background: transparent;
+    border: 1.5px solid rgba(43, 35, 32, 0.18);
+    border-radius: 10px;
+    cursor: pointer;
+    flex: none;
+  }
+  .ph-burger span {
+    display: block;
+    height: 2px;
+    width: 100%;
+    background: var(--ink);
+    border-radius: 2px;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+  .ph-burger[aria-expanded='true'] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .ph-burger[aria-expanded='true'] span:nth-child(2) { opacity: 0; }
+  .ph-burger[aria-expanded='true'] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* --- Slide-in drawer --- */
+  .ph-drawer { position: fixed; inset: 0; z-index: 50; visibility: hidden; }
+  .ph-drawer.is-open { visibility: visible; }
+  .ph-drawer__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(40, 18, 16, 0.5);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+  .ph-drawer.is-open .ph-drawer__backdrop { opacity: 1; }
+  .ph-drawer__panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: min(82vw, 320px);
+    background-color: var(--ground);
+    background-image: var(--pattern-ground);
+    box-shadow: -12px 0 40px rgba(40, 18, 16, 0.28);
+    transform: translateX(100%);
+    transition: transform 0.28s cubic-bezier(0.2, 0.7, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    overflow-y: auto;
+  }
+  .ph-drawer.is-open .ph-drawer__panel { transform: translateX(0); }
+  .ph-drawer__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 8px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(43, 35, 32, 0.12);
+  }
+  .ph-drawer__brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 18px;
+    color: var(--ink);
+  }
+  .ph-drawer__logo { width: 36px; height: 36px; border-radius: 50%; flex: none; }
+  .ph-drawer__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    border: none;
+    color: var(--ink);
+    cursor: pointer;
+    border-radius: 8px;
+    flex: none;
+  }
+  .ph-drawer__close:hover { background: rgba(43, 35, 32, 0.08); }
+  .ph-drawer__links { display: flex; flex-direction: column; margin-top: 8px; }
+  .ph-drawer__links a {
+    font-family: 'Marcellus', serif;
+    font-size: 22px;
+    color: var(--ink);
+    text-decoration: none;
+    padding: 15px 8px;
+    border-bottom: 1px solid rgba(43, 35, 32, 0.08);
+    border-radius: 6px;
+    transition: background 0.15s ease;
+  }
+  .ph-drawer__links a:hover { background: rgba(184, 134, 11, 0.12); }
+  .ph-drawer__cta { margin-top: auto; justify-content: center; font-size: 19px; }
+
+  @media (max-width: 720px) {
+    .ph-nav__reservar { display: none !important; }
+    .ph-burger { display: flex; }
+  }
+  @media (min-width: 721px) {
+    .ph-drawer { display: none !important; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ph-drawer__panel,
+    .ph-drawer__backdrop,
+    .ph-burger span { transition: none !important; }
+  }
 </style>
+
+<script>
+  // Mobile drawer: open/close, backdrop + Escape, scroll-lock, basic focus trap.
+  const drawer = document.getElementById('ph-mobile-nav');
+  const burger = document.querySelector<HTMLButtonElement>('.ph-burger');
+
+  if (drawer && burger) {
+    const panel = drawer.querySelector<HTMLElement>('.ph-drawer__panel')!;
+    const isOpen = () => drawer.classList.contains('is-open');
+    const focusables = () =>
+      Array.from(panel.querySelectorAll<HTMLElement>('a[href], button:not([disabled])'));
+
+    const open = () => {
+      drawer.classList.add('is-open');
+      burger.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+      focusables()[0]?.focus();
+    };
+    const close = () => {
+      drawer.classList.remove('is-open');
+      burger.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+      burger.focus();
+    };
+
+    burger.addEventListener('click', () => (isOpen() ? close() : open()));
+    drawer.querySelectorAll('[data-close]').forEach((el) => el.addEventListener('click', close));
+
+    document.addEventListener('keydown', (e) => {
+      if (!isOpen()) return;
+      if (e.key === 'Escape') {
+        close();
+      } else if (e.key === 'Tab') {
+        const f = focusables();
+        if (!f.length) return;
+        const first = f[0];
+        const last = f[f.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    });
+
+    // If the viewport grows back to desktop while open, close and restore scroll.
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 720 && isOpen()) close();
+    });
+  }
+</script>

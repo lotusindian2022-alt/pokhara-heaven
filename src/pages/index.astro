@@ -7,18 +7,27 @@ import DishCard from '../components/DishCard.astro';
 import ImageSlot from '../components/ImageSlot.astro';
 import ReservationForm from '../components/ReservationForm.astro';
 import heroHimalaya from '../assets/hero-himalaya.jpg';
+import momosVapor from '../assets/momos-vapor.jpg';
+import sekuwa from '../assets/sekuwa.jpg';
+import jholMomo from '../assets/jhol-momo.jpg';
+import thali from '../assets/thali.jpg';
+import taco from '../assets/taco.jpg';
+import chowmein from '../assets/chowmein.jpg';
+import quoteBg from '../assets/quote-bg.jpg';
 import { site } from '../data/site';
 
 // Lattice overlay opacity — the handoff's "motif" prop (subtle 0.08 / bold 0.16 / none 0).
 const latticeOpacity = 0.08;
 
+// Home showcase — dishes we have real photography for. Each card deep-links to
+// the dish on the menu (/carta#<slug>).
 const signatureDishes = [
-  { title: 'Momos al vapor', price: '10,95€', desc: 'Masa doblada a mano, rellena de pollo y especias, al vapor. El plato que define Nepal.', placeholder: 'Momos al vapor', tone: 'warm' as const },
-  { title: 'Chicken Sekuwa', price: '12,90€', desc: 'Pollo marinado a la brasa con pimienta negra y especias nepalíes. Nuestra especialidad.', placeholder: 'Sekuwa a la brasa', tone: 'ember' as const },
-  { title: 'Chicken Thali', price: '22,95€', desc: 'Bandeja completa: arroz basmati, curry, dal negro, raita, papadum y gulab jamun.', placeholder: 'Thali completo', tone: 'warm' as const },
-  { title: 'Jhol Momo', price: '6,95€', desc: 'Momos servidos en su caldo especiado de sésamo y tomate. Reconfortante.', placeholder: 'Jhol momo en caldo', tone: 'ember' as const },
-  { title: 'Butter Chicken', price: '12,95€', desc: 'Pollo en salsa cremosa de tomate, mantequilla y especias suaves. Un clásico que gusta a todos.', placeholder: 'Butter Chicken', tone: 'ember' as const },
-  { title: 'Mustang Aloo', price: '6,95€', desc: 'Patata salteada con ajo, jengibre, cilantro y especias. Muy popular en Nepal.', placeholder: 'Mustang aloo', veg: true, tone: 'green' as const },
+  { title: 'Momos al vapor', price: '10,95€', desc: 'Masa doblada a mano, rellena de pollo y especias, al vapor. El plato que define Nepal.', placeholder: 'Momos al vapor', src: momosVapor, tone: 'warm' as const, href: '/carta#chicken-momo' },
+  { title: 'Chicken Sekuwa', price: '12,90€', desc: 'Pollo marinado a la brasa con pimienta negra y especias nepalíes. Nuestra especialidad.', placeholder: 'Sekuwa a la brasa', src: sekuwa, tone: 'ember' as const, href: '/carta#nepali-famous-chicken-sekuwa' },
+  { title: 'Chicken Thali', price: '22,95€', desc: 'Bandeja completa: arroz basmati, curry, dal negro, raita, papadum y gulab jamun.', placeholder: 'Thali completo', src: thali, tone: 'warm' as const, href: '/carta#chicken-thali' },
+  { title: 'Jhol Momo', price: '6,95€', desc: 'Momos servidos en su caldo especiado de sésamo y tomate. Reconfortante.', placeholder: 'Jhol momo en caldo', src: jholMomo, tone: 'ember' as const, href: '/carta#jhol-momo' },
+  { title: 'Nepalí Taco', price: '5,90€', desc: 'Pan nepalí relleno de pollo tikka, tomate, cebolla y mayonesa especiada. Un bocado con firma.', placeholder: 'Nepalí Taco', src: taco, tone: 'ember' as const, href: '/carta#nepali-taco' },
+  { title: 'Chowmein', price: '10,50€', desc: 'Tallarines salteados al wok con pollo, gambas y verduras. El clásico callejero del Himalaya.', placeholder: 'Chowmein', src: chowmein, tone: 'warm' as const, href: '/carta#chicken-tikka-chowmein' },
 ];
 ---
 
@@ -52,7 +61,7 @@ const signatureDishes = [
       <div style="position:relative; padding:60px var(--gutter-home); color:var(--cream); width:100%; text-align:center;">
         <span style="display:inline-block; font-size:15px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:var(--cream); background:rgba(247,241,230,0.16); backdrop-filter:blur(6px); border:1px solid rgba(247,241,230,0.45); padding:8px 16px; border-radius:100px; margin-bottom:22px;">नमस्ते · Cocina himalaya en Madrid</span>
         <h1 class="v2-title" style="font-family:'Marcellus',serif; line-height:0.98; letter-spacing:0; margin:0 auto; max-width:12ch; text-shadow:0 2px 30px rgba(40,18,16,0.45);">Pokhara <span style="color:var(--gold-bright);">Heaven</span></h1>
-        <p style="font-size:21px; line-height:1.55; max-width:52ch; margin:24px auto 0; color:rgba(247,241,230,0.94);">Dumplings del Himalaya, sekuwa a la brasa y thali de Nepal — recetas de familia del valle de Pokhara, servidas en el corazón de la ciudad.</p>
+        <p style="font-size:21px; line-height:1.55; max-width:52ch; margin:24px auto 0; color:rgba(247,241,230,0.94);">Dumplings del Himalaya, sekuwa a la brasa y thali de Nepal — recetas de familia del valle de Pokhara, servidas en el corazón de Parla.</p>
         <div style="display:flex; gap:14px; margin-top:34px; flex-wrap:wrap; justify-content:center;">
           <a class="ph-btn ph-btn-primary" href="#pedir">Pedir a domicilio</a>
           <a class="ph-btn ph-btn-ghost" href="/carta">Ver la carta</a>
@@ -80,7 +89,7 @@ const signatureDishes = [
         <h2 style="font-family:'Marcellus',serif; font-weight:400; font-size:54px; line-height:1.08; letter-spacing:0; margin:0;">Del valle de Pokhara a tu mesa</h2>
         <div style="width:56px; height:3px; background:var(--gold); margin:26px auto;"></div>
         <p style="font-size:21px; line-height:1.75; color:rgba(247,241,230,0.92); margin:0 auto; max-width:62ch;">Pokhara es la ciudad de los lagos, a los pies del Annapurna. De allí traemos lo esencial: el momo doblado a mano una pieza a la vez, la brasa lenta del sekuwa y los curris cocinados sin prisa.</p>
-        <p style="font-size:21px; line-height:1.75; color:rgba(247,241,230,0.92); margin:18px auto 0; max-width:62ch;">Cocina newari y thakali honesta, especias auténticas y la hospitalidad de Nepal — en un rincón cálido de Madrid.</p>
+        <p style="font-size:21px; line-height:1.75; color:rgba(247,241,230,0.92); margin:18px auto 0; max-width:62ch;">Cocina newari y thakali honesta, especias auténticas y la hospitalidad de Nepal — en un rincón cálido de Parla.</p>
       </div>
     </section>
 
@@ -104,6 +113,8 @@ const signatureDishes = [
       <div data-parallax style="position:absolute; left:0; right:0; top:-12%; height:124%;">
         <div style="position:absolute; inset:0;">
           <ImageSlot
+            src={quoteBg}
+            alt="Plaza Durbar en el valle de Katmandú, Nepal"
             placeholder="Foto amplia — brasa / manos doblando momos / paisaje de Pokhara"
             tone="ember"
             sizes="100vw"
@@ -149,23 +160,24 @@ const signatureDishes = [
     <section id="visitanos" style="padding:104px var(--gutter-home);">
       <div data-reveal>
         <span style="display:block; font-size:15px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:#176B5F; margin-bottom:14px;">Visítanos</span>
-        <h2 style="font-family:'Marcellus',serif; font-weight:400; font-size:50px; line-height:1.1; letter-spacing:0; margin:0 0 44px;">Te esperamos en el centro</h2>
+        <h2 style="font-family:'Marcellus',serif; font-weight:400; font-size:50px; line-height:1.1; letter-spacing:0; margin:0 0 44px;">Te esperamos en Parla</h2>
       </div>
       <div data-reveal class="v2-loc" style="display:grid; grid-template-columns:1.4fr 1fr; gap:32px; align-items:stretch;">
         <figure style="margin:0; border-radius:12px; overflow:hidden; min-height:380px; position:relative;">
-          <div style="position:absolute; inset:0;">
-            <ImageSlot
-              placeholder="Mapa — Calle del Ejemplo 24, Madrid (captura de Google Maps)"
-              tone="green"
-              sizes="(max-width:720px) 100vw, 60vw"
-            />
-          </div>
-          <a href={site.address.mapsUrl} target="_blank" rel="noopener" style="position:absolute; left:20px; bottom:20px; background:#FCF6EC; color:var(--ink); text-decoration:none; font-weight:600; font-size:17px; padding:12px 18px; border-radius:9px; box-shadow:0 4px 18px rgba(46,23,18,0.18);">Ver en Google Maps →</a>
+          <iframe
+            title="Mapa — Pokhara Heaven, Parla"
+            src={site.address.mapsEmbedUrl}
+            style="position:absolute; inset:0; width:100%; height:100%; border:0;"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            allowfullscreen
+          ></iframe>
+          <a href={site.address.mapsUrl} target="_blank" rel="noopener" style="position:absolute; left:20px; bottom:20px; background:#FCF6EC; color:var(--ink); text-decoration:none; font-weight:600; font-size:17px; padding:12px 18px; border-radius:9px; box-shadow:0 4px 18px rgba(46,23,18,0.18); z-index:1;">Ver en Google Maps →</a>
         </figure>
         <div style="display:flex; flex-direction:column; gap:14px;">
           <div style="background:var(--surface); border-radius:12px; padding:28px; box-shadow:var(--shadow-soft);">
             <span style="display:block; font-size:14px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:var(--terracotta); margin-bottom:12px;">Dónde</span>
-            <p style="font-size:20px; line-height:1.7; color:var(--ink); margin:0;">{site.address.line1}<br />{site.address.line2}<br /><span style="color:var(--muted);">{site.address.metro}</span></p>
+            <p style="font-size:20px; line-height:1.7; color:var(--ink); margin:0;">{site.address.line1}{site.address.line2 && <><br />{site.address.line2}</>}{site.address.metro && <><br /><span style="color:var(--muted);">{site.address.metro}</span></>}</p>
           </div>
           <div style="background:var(--surface); border-radius:12px; padding:28px; box-shadow:var(--shadow-soft);">
             <span style="display:block; font-size:14px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:var(--terracotta); margin-bottom:12px;">Horario</span>
@@ -188,10 +200,10 @@ const signatureDishes = [
         <div style="color:var(--cream);">
           <span style="display:block; font-size:15px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--gold-bright); margin-bottom:14px;">Reserva tu mesa</span>
           <h2 style="font-family:'Marcellus',serif; font-weight:400; font-size:48px; line-height:1.1; letter-spacing:0; margin:0;">Guardamos tu sitio</h2>
-          <p style="font-size:21px; line-height:1.65; color:rgba(247,241,230,0.86); margin:20px 0 0; max-width:44ch;">Dinos el día, la hora y cuántos sois. Te confirmamos por teléfono o email. Para hoy mismo, mejor llámanos.</p>
+          <p style="font-size:21px; line-height:1.65; color:rgba(247,241,230,0.86); margin:20px 0 0; max-width:44ch;">Dinos el día, la hora y cuántos sois y te abrimos WhatsApp con la reserva lista para enviar. Para hoy mismo, mejor llámanos.</p>
           <div style="margin-top:26px; display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;">
             <a href={site.phoneHref} style="font-family:'Marcellus',serif; font-weight:400; font-size:30px; color:var(--gold-bright); text-decoration:none;">{site.phone}</a>
-            <span style="font-size:17px; color:rgba(247,241,230,0.7);">· {site.address.line1}, {site.address.line2}</span>
+            <span style="font-size:17px; color:rgba(247,241,230,0.7);">· WhatsApp {site.whatsapp}</span>
           </div>
         </div>
         <ReservationForm />

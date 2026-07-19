@@ -63,9 +63,9 @@ const { latticeOpacity = 0.08 } = Astro.props;
         Contacto
       </span>
       <div style="font-size:17px; line-height:1.9; color:rgba(247,241,230,0.8);">
-        {site.address.line1}<br />
-        {site.address.line2}<br />
-        <a href={site.phoneHref} style="color:inherit; text-decoration:none;">{site.phone}</a><br />
+        {site.address.line1}{site.address.line2 && <><br />{site.address.line2}</>}<br />
+        <a href={site.phoneHref} style="color:inherit; text-decoration:none;">Tel · {site.phone}</a><br />
+        <a href={site.whatsappUrl} target="_blank" rel="noopener" style="color:inherit; text-decoration:none;">WhatsApp · {site.whatsapp}</a><br />
         <a href={`mailto:${site.email}`} style="color:inherit; text-decoration:none;">{site.email}</a>
       </div>
     </div>
